@@ -1,0 +1,32 @@
+<div class="page-header">
+  <div>
+    <h1 class="text-gradient">Create Session</h1>
+    <p class="subtitle">Start a new contextual grouping for your memories.</p>
+  </div>
+  <a routerLink="/dashboard/sessions" class="btn-secondary">← Back</a>
+</div>
+
+<div class="glass-panel form-panel">
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="title">Session Title</label>
+      <input 
+        type="text" 
+        id="title" 
+        name="title"
+        [(ngModel)]="title"
+        class="glass-input" 
+        placeholder="e.g. Project Apollo Details"
+        required
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="btn-primary submit-btn" [disabled]="isLoading">
+      <span *ngIf="!isLoading">Create Session</span>
+      <span *ngIf="isLoading" class="spinner"></span>
+    </button>
+  </form>
+</div>
