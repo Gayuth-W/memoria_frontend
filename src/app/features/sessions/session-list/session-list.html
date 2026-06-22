@@ -1,0 +1,28 @@
+<div class="page-header">
+  <div>
+    <h1 class="text-gradient">Sessions</h1>
+    <p class="subtitle">Organize your memories into contextual sessions.</p>
+  </div>
+  <a routerLink="/dashboard/sessions/create" class="btn-primary">+ New Session</a>
+</div>
+
+<div class="loader" *ngIf="isLoading">
+  <div class="spinner"></div>
+</div>
+
+<div class="empty-state glass-panel" *ngIf="!isLoading && sessions.length === 0">
+  <div class="empty-icon">📁</div>
+  <h3>No Sessions Found</h3>
+  <p>Create your first session to start grouping memories together.</p>
+</div>
+
+<div class="session-grid" *ngIf="!isLoading && sessions.length > 0">
+  <div class="session-card glass-panel" *ngFor="let s of sessions" [routerLink]="['/dashboard/sessions', s.id]">
+    <div class="card-icon">📁</div>
+    <div class="card-content">
+      <h3>{{ s.title }}</h3>
+      <span class="date">{{ s.created_at | date:'mediumDate' }}</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </div>
+</div>
