@@ -1,0 +1,26 @@
+<div class="page-header">
+  <div>
+    <h1 class="text-gradient">All Memories</h1>
+    <p class="subtitle">A chronological view of every thought you've recorded.</p>
+  </div>
+</div>
+
+<div class="loader" *ngIf="isLoading">
+  <div class="spinner"></div>
+</div>
+
+<div class="empty-state glass-panel" *ngIf="!isLoading && memories.length === 0">
+  <div class="empty-icon">🧠</div>
+  <h3>Your Mind is Empty</h3>
+  <p>Create sessions to start storing your memories.</p>
+</div>
+
+<div class="memories-grid" *ngIf="!isLoading && memories.length > 0">
+  <div class="memory-card glass-panel" *ngFor="let m of memories">
+    <div class="card-badge">Session: {{ m.session_id.substring(0, 8) }}...</div>
+    <div class="memory-content">{{ m.text }}</div>
+    <div class="memory-footer">
+      <span class="date">{{ m.created_at | date:'mediumDate' }}</span>
+    </div>
+  </div>
+</div>
