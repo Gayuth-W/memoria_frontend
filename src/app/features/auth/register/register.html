@@ -1,0 +1,38 @@
+<div class="auth-container">
+  <div class="glass-panel auth-card">
+    <div class="auth-header">
+      <div class="logo">
+        <div class="logo-icon">M</div>
+      </div>
+      <h1 class="text-gradient">Create Account</h1>
+      <p class="subtitle">Generate a new API key to start storing memories.</p>
+    </div>
+
+    <div class="auth-form" *ngIf="!generatedKey">
+      <button type="button" class="btn-primary auth-submit" (click)="generateKey()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Generate API Key</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+      <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
+    </div>
+
+    <div class="key-display" *ngIf="generatedKey">
+      <div class="success-icon">✓</div>
+      <h3>Your API Key is Ready</h3>
+      <p class="warning-text">Copy this key now. You won't be able to see it again!</p>
+      
+      <div class="key-box">
+        <code>{{ generatedKey }}</code>
+        <button class="copy-btn" (click)="copyKey()">{{ copied ? 'Copied!' : 'Copy' }}</button>
+      </div>
+
+      <button type="button" class="btn-primary auth-submit" (click)="continueToDashboard()">
+        Continue to Dashboard
+      </button>
+    </div>
+
+    <div class="auth-footer" *ngIf="!generatedKey">
+      <p>Already have a key? <a routerLink="/login">Log in here</a></p>
+    </div>
+  </div>
+</div>
