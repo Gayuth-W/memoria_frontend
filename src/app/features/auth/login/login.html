@@ -1,0 +1,37 @@
+<div class="auth-container">
+  <div class="glass-panel auth-card">
+    <div class="auth-header">
+      <div class="logo">
+        <div class="logo-icon">M</div>
+      </div>
+      <h1 class="text-gradient">Welcome back</h1>
+      <p class="subtitle">Enter your API key to access your memories.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="apiKey">API Key</label>
+        <input 
+          type="password" 
+          id="apiKey" 
+          name="apiKey"
+          [(ngModel)]="apiKey"
+          class="glass-input" 
+          placeholder="mem-xxxxxxxx-xxxx"
+          required
+        >
+      </div>
+
+      <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+      <button type="submit" class="btn-primary auth-submit" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Access Memoria</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an API key? <a routerLink="/register">Generate one here</a></p>
+    </div>
+  </div>
+</div>
