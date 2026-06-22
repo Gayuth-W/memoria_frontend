@@ -1,0 +1,53 @@
+<div class="page-header" *ngIf="session">
+  <div>
+    <a routerLink="/dashboard/sessions" class="breadcrumb-link">← All Sessions</a>
+    <h1 class="text-gradient">{{ session.title }}</h1>
+    <p class="subtitle">Created on {{ session.created_at | date:'medium' }}</p>
+  </div>
+  <button class="btn-primary" (click)="openAddMemory()">+ Add Memory</button>
+</div>
+
+<div class="loader" *ngIf="isLoading">
+  <div class="spinner"></div>
+</div>
+
+<div class="empty-state glass-panel" *ngIf="!isLoading && memories.length === 0">
+  <div class="empty-icon">🧠</div>
+  <h3>No Memories Yet</h3>
+  <p>Add your first memory to this session to start building context.</p>
+</div>
+
+<div class="memories-timeline" *ngIf="!isLoading && memories.length > 0">
+  <div class="memory-card glass-panel" *ngFor="let m of memories">
+    <div class="memory-content">{{ m.text }}</div>
+    <div class="memory-footer">
+      <span class="date">{{ m.created_at | date:'shortTime' }}</span>
+      <button class="icon-btn delete-btn" (click)="deleteMemory(m.id)" title="Delete Memory">🗑️</button>
+    </div>
+  </div>
+</div>
+
+<!-- Simple Add Memory Modal Overlay -->
+<div class="modal-overlay" *ngIf="showAddModal">
+  <div class="glass-panel modal-card">
+    <div class="modal-header">
+      <h2>Add Memory</h2>
+      <button class="close-btn" (click)="closeAddMemory()">×</button>
+    </div>
+    <div class="modal-body">
+      <textarea 
+        class="glass-input memory-textarea" 
+        [(ngModel)]="newMemoryText" 
+        placeholder="What do you want to remember?"
+        rows="4"
+      ></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeAddMemory()">Cancel</button>
+      <button class="btn-primary" (click)="submitMemory()" [disabled]="isSubmitting || !newMemoryText.trim()">
+        <span *ngIf="!isSubmitting">Save Memory</span>
+        <span *ngIf="isSubmitting" class="spinner small-spinner"></span>
+      </button>
+    </div>
+  </div>
+</div>
