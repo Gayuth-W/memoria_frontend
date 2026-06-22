@@ -1,0 +1,65 @@
+<div class="page-header">
+  <div>
+    <h1 class="text-gradient">Search Engine</h1>
+    <p class="subtitle">Use natural language to find exactly what you're looking for.</p>
+  </div>
+</div>
+
+<div class="search-container glass-panel">
+  <form (ngSubmit)="onSearch()" class="search-form">
+    <div class="search-icon">🔍</div>
+    <input 
+      type="text" 
+      [(ngModel)]="query" 
+      name="query" 
+      placeholder="Ask a question or search for keywords..." 
+      class="search-input"
+      autocomplete="off"
+    >
+    <button type="submit" class="btn-primary search-btn" [disabled]="isSearching || !query.trim()">
+      <span *ngIf="!isSearching">Search</span>
+      <span *ngIf="isSearching" class="spinner small-spinner"></span>
+    </button>
+  </form>
+  
+  <!-- Optional Session Filter -->
+  <div class="filters">
+    <label>Filter by Session (Optional):</label>
+    <select [(ngModel)]="selectedSessionId" class="glass-select">
+      <option value="">All Sessions</option>
+      <option *ngFor="let s of sessions" [value]="s.id">{{ s.title }}</option>
+    </select>
+  </div>
+</div>
+
+<!-- Results Area -->
+<div class="results-area" *ngIf="hasSearched">
+  <div class="results-header">
+    <h3>Search Results</h3>
+    <span class="badge">{{ results.length }} found</span>
+  </div>
+
+  <div class="empty-state glass-panel" *ngIf="results.length === 0">
+    <div class="empty-icon">🤷</div>
+    <h3>No matches found</h3>
+    <p>Try rephrasing your search query.</p>
+  </div>
+
+  <div class="results-list" *ngIf="results.length > 0">
+    <div class="result-card glass-panel" *ngFor="let r of results">
+      <div class="result-score" title="Relevance Score">
+        <div class="score-circle" [style.background]="getScoreColor(r.score)">
+          {{ (r.score * 100).toFixed(0) }}%
+        </div>
+      </div>
+      <div class="result-content">
+        <p>{{ r.memory.text }}</p>
+        <div class="result-meta">
+          <span>Session: {{ r.memory.session_id.substring(0, 8) }}...</span>
+          <span>•</span>
+          <span>{{ r.memory.created_at | date:'mediumDate' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
