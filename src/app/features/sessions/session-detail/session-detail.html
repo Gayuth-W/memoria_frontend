@@ -1,7 +1,7 @@
 <div class="page-header" *ngIf="session">
   <div>
     <a routerLink="/dashboard/sessions" class="breadcrumb-link">← All Sessions</a>
-    <h1 class="text-gradient">{{ session.title }}</h1>
+    <h1 class="text-gradient">{{ session.title || 'Untitled Session' }}</h1>
     <p class="subtitle">Created on {{ session.created_at | date:'medium' }}</p>
   </div>
   <button class="btn-primary" (click)="openAddMemory()">+ Add Memory</button>

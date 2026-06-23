@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -18,11 +18,12 @@ export class SessionDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private sessionService = inject(SessionService);
   private memoryService = inject(MemoryService);
+  private cdr = inject(ChangeDetectorRef);
 
   sessionId: string = '';
   session: Session | null = null;
   memories: Memory[] = [];
-  
+
   isLoading = true;
   showAddModal = false;
   newMemoryText = '';
@@ -45,6 +46,7 @@ export class SessionDetail implements OnInit {
       error: (err) => {
         console.error('Failed to load session', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -54,10 +56,12 @@ export class SessionDetail implements OnInit {
       next: (mems) => {
         this.memories = mems || [];
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to load memories', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -73,7 +77,7 @@ export class SessionDetail implements OnInit {
 
   submitMemory() {
     if (!this.newMemoryText.trim()) return;
-    
+
     this.isSubmitting = true;
     this.memoryService.create(this.sessionId, this.newMemoryText).subscribe({
       next: () => {
@@ -84,6 +88,7 @@ export class SessionDetail implements OnInit {
       error: (err) => {
         console.error('Failed to add memory', err);
         this.isSubmitting = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -92,7 +97,10 @@ export class SessionDetail implements OnInit {
     if (confirm('Are you sure you want to delete this memory?')) {
       this.memoryService.delete(id).subscribe({
         next: () => this.loadMemories(),
-        error: (err) => console.error('Failed to delete memory', err)
+        error: (err) => {
+          console.error('Failed to delete memory', err);
+          this.cdr.detectChanges();
+        }
       });
     }
   }
