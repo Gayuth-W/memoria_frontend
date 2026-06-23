@@ -25,7 +25,6 @@ export class SessionList implements OnInit {
   loadSessions() {
     this.sessionService.listByUser().subscribe({
       next: (res) => {
-        console.log("Received data:", res);
         this.sessions = res || [];
         this.isLoading = false;
         this.cdr.detectChanges();

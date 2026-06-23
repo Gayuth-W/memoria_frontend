@@ -10,6 +10,7 @@ export class SearchService {
   private apiUrl = `${environment.apiUrl}/search`;
 
   search(sessionId: string, query: string): Observable<SearchResponse> {
+    console.log(this.apiUrl);
     return this.http.post<SearchResponse>(this.apiUrl, { session_id: sessionId, query });
   }
 }

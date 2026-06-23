@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchService } from '../../../core/services/search';
@@ -16,35 +16,44 @@ import { Session } from '../../../shared/models/session';
 export class SearchPage implements OnInit {
   private searchService = inject(SearchService);
   private sessionService = inject(SessionService);
+  private cdr = inject(ChangeDetectorRef);
 
   query: string = '';
   selectedSessionId: string = '';
   sessions: Session[] = [];
-  
+
   results: SearchResult[] = [];
   isSearching = false;
   hasSearched = false;
 
   ngOnInit() {
-    this.sessionService.listByUser().subscribe(res => {
-      this.sessions = res || [];
+    this.sessionService.listByUser().subscribe({
+      next: (res) => {
+        this.sessions = res || [];
+        this.cdr.detectChanges();
+      }
     });
   }
 
   onSearch() {
     if (!this.query.trim()) return;
 
+    console.log("Searching for:", this.query, "in session:", this.selectedSessionId || "All Sessions");
+
     this.isSearching = true;
     this.hasSearched = true;
 
     this.searchService.search(this.selectedSessionId, this.query).subscribe({
       next: (res) => {
+        console.log("Search Results:", res);
         this.results = res.results || [];
         this.isSearching = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Search failed', err);
         this.isSearching = false;
+        this.cdr.detectChanges();
       }
     });
   }
