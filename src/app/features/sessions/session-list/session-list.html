@@ -20,7 +20,7 @@
   <div class="session-card glass-panel" *ngFor="let s of sessions" [routerLink]="['/dashboard/sessions', s.id]">
     <div class="card-icon">📁</div>
     <div class="card-content">
-      <h3>{{ s.title }}</h3>
+      <h3>{{ s.title || 'Untitled Session' }}</h3>
       <span class="date">{{ s.created_at | date:'mediumDate' }}</span>
     </div>
     <div class="card-arrow">→</div>

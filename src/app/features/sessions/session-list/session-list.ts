@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SessionService } from '../../../core/services/session';
@@ -13,7 +13,8 @@ import { Session } from '../../../shared/models/session';
 })
 export class SessionList implements OnInit {
   private sessionService = inject(SessionService);
-  
+  private cdr = inject(ChangeDetectorRef);
+
   sessions: Session[] = [];
   isLoading = true;
 
@@ -24,12 +25,15 @@ export class SessionList implements OnInit {
   loadSessions() {
     this.sessionService.listByUser().subscribe({
       next: (res) => {
+        console.log("Received data:", res);
         this.sessions = res || [];
         this.isLoading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Failed to load sessions', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
